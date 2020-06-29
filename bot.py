@@ -13,3 +13,9 @@ from selenium import webdriver
         else 
             print ("Element not found")
             return False              
+    
+    #go to snkrs page 
+    click(self, '//*[@id="header"]/div[1]/div/div/div[1]/ul/li[4]/a')
+    
+    #go to stock
+    click(self, '//*[@id="estoque-tab"]')
