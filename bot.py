@@ -3,13 +3,13 @@ from selenium import webdriver
 
 class NikeBot:
 
-    URL = ""
+    URL = "https://www.nike.com.br/Snkrs#estoque"
 
     PATH_EDGE = "./edgedriver_win64/msedgedriver.exe"
 
     PATH_CHROME = "./chromedriver_win32/chromedriver.exe"
 
-    def __init__(self, driver, url):
+    def __init__(self, driver):
         if driver:
             if driver == "edge":
                 self.driver = webdriver.Edge(self.PATH_EDGE)
@@ -17,15 +17,11 @@ class NikeBot:
                 self.driver = webdriver.Edge(self.PATH_CHROME)
             else:
                 print(driver + " is not a supported webdriver please choose an other one")
-            self.URL = url
         else:
-            print("A driver wasn't selected\nusage: var = NikeBot(\"edge\") or var = NikeBot(\"chrome\")")
+            print("A driver wasn't selected\nusage: var = NikeBot(\"edge\", url) or var = NikeBot(\"chrome\", url)")
 
     def open_url(self):
-        if self.URL:
-            self.driver.get(self.URL)
-        else:
-            print("An url must be passed to the object parameters")
+        self.driver.get(self.URL)
 
     def click(self, xpath):
         elem = self.driver.find_element_by_xpath(xpath)
