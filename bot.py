@@ -42,3 +42,29 @@ class NikeBot:
         xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
         link = self.driver.find_element_by_xpath(xpath).get_attribute("href")
         self.driver.get(link)
+    #  later remember to do this 
+    # def get_number(self):
+    
+
+    def login_checker (self):
+        #there is two ways of doing it
+        # FIRST
+        #xpath = "//*[@id=\"header\"]/div[1]/div/div/div[2]/span[1]/span[3]"
+        #ClassPicker = self.driver.find_element_by_xpath(xpath).get_attribute("class")
+        #if "nao_logado" in ClassPicker:
+        #    print ("You are not logged in")
+        #    return False
+        #else:
+        #    return True  
+        #
+        # SECOND
+        xpath = "//*[@id=\"header\"]/div[1]/div/div/div[2]/span[1]/span[1]"
+        try:
+            self.driver.find_element_by_xpath(xpath)
+            print ("You are logged in")
+        except:
+            xpath_to_login = "//*[@id=\"anchor-acessar\"]"
+            xpath_to_login.click()
+            print ("Please Login")
+
+
