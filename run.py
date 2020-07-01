@@ -4,20 +4,34 @@ import sys
 
 def send_help():
     print("Usage:\n python script.py -b <browser_name> or python script.py --browser <browser_name> ")
+    exit(1)
 
 
 def initialize_script():
+
+    browser_name = ""
+
     if len(sys.argv) > 1:
+
         i = 0
         while i < len(sys.argv):
-            if sys.argv[i] == "-b" or sys.argv[i] == "--browser":
-                return sys.argv[i + 1] if sys.argv[i + 1] else "chrome"
-            else:
+
+            try:
+                if sys.argv[i] == "-b" or sys.argv[i] == "--browser":
+                    browser_name = sys.argv[i + 1] if sys.argv[i + 1] else ""
+            except:
                 send_help()
+
             i += 1
+
+        if browser_name == "":
+            send_help()
+        else:
+            return browser_name
     else:
+        print("You didn't pass any arguments")
         send_help()
-        exit()
+        exit(1)
 
 
 browser = initialize_script()

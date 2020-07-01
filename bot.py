@@ -23,7 +23,11 @@ class NikeBot:
             print("A driver wasn't selected\nusage: var = NikeBot(\"edge\", url) or var = NikeBot(\"chrome\", url)")
 
     def open_url(self):
-        self.driver.get(self.URL)
+        try:
+            self.driver.get(self.URL)
+        except:
+            print("Please use a valid URL")
+            exit(1)
 
     def click(self, xpath):
         elem = self.driver.find_element_by_xpath(xpath)
