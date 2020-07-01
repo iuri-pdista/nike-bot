@@ -26,7 +26,7 @@ class NikeBot:
         try:
             self.driver.get(self.URL)
         except:
-            print("Please use a valid URL")
+            print("Please use a valid browser")
             exit(1)
 
     def click(self, xpath):
