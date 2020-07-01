@@ -39,4 +39,6 @@ browser = initialize_script()
 bot = NikeBot(browser)
 
 bot.open_url()
+bot.login_checker()
 bot.get_product()
+bot.get_size()

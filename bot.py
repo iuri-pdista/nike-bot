@@ -42,9 +42,19 @@ class NikeBot:
         xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
         link = self.driver.find_element_by_xpath(xpath).get_attribute("href")
         self.driver.get(link)
-    #  later remember to do this 
-    # def get_number(self):
     
+    def get_size(self, Size_option1, Size_option2):
+        try:
+            Size_option1 = self.driver.find_element_by_id("tamanho__id" + Size_option1)
+            Size_option1.get_attribute("disabled") != "disabled" 
+            Size_option1.click()
+        except:
+            Size_option2 = self.driver.find_element_by_id("tamanho__id" + Size_option2)
+            Size_option2.get_attribute("disabled") != "disabled"
+            Size_option1.click()
+        else:
+            print ("The values you selected are not available")
+            #we need to think what to do when the sizes are not available, because exitting and running the script all again is not a possibility
 
     def login_checker (self):
         #there is two ways of doing it
@@ -53,7 +63,9 @@ class NikeBot:
         #ClassPicker = self.driver.find_element_by_xpath(xpath).get_attribute("class")
         #if "nao_logado" in ClassPicker:
         #    print ("You are not logged in")
-        #    return False
+        #    xpath_to_login = "//*[@id=\"anchor-acessar\"]"
+        #    xpath_to_login.click()
+        #    print ("Please Login")
         #else:
         #    return True  
         #
@@ -62,9 +74,22 @@ class NikeBot:
         try:
             self.driver.find_element_by_xpath(xpath)
             print ("You are logged in")
+            return True
         except:
             xpath_to_login = "//*[@id=\"anchor-acessar\"]"
             xpath_to_login.click()
             print ("Please Login")
-
-
+    def add_to_cart (self):
+        xpath = "//*[@id=\"btn-comprar\"]"              
+        click(xpath)
+    def finalize(self):
+        xpath_cart = "//*[@id=\"carrinho\"]/div[3]/div[5]/a"
+        xpath_identification = "//*[@id=\"seguir-pagamento\"]"
+        xpath_payment = "//*[@id=\"confirmar-pagamento\"]"
+        click(xpath_cart)
+        #we need to insert a little pause to the page load
+        click(xpath_identification)
+        #same
+        #we need to create exceptions to check if the fields are filled
+        click(xpath_payment)
+        
