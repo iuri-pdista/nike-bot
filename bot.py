@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium import webdriver
 
 
@@ -31,3 +33,8 @@ class NikeBot:
         else:
             print("Element not found")
             return False
+
+    def get_product(self):
+        xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
+        link = self.driver.find_element_by_xpath(xpath).get_attribute("href")
+        self.driver.get(link)
