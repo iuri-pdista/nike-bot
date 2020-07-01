@@ -25,3 +25,4 @@ browser = initialize_script()
 bot = NikeBot(browser)
 
 bot.open_url()
+bot.get_product()
