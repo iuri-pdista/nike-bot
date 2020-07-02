@@ -1,3 +1,5 @@
+from time import sleep
+
 from bot import NikeBot
 import sys
 
@@ -52,5 +54,7 @@ bot.open_url()
 bot.get_product()
 bot.click_login()
 bot.login(email, password)
+sleep(10)
 bot.get_size("43", "43")
-bot.click_login()
+sleep(3)
+bot.click_buy()
