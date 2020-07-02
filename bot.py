@@ -66,3 +66,12 @@ class NikeBot:
                 print("invalid shoe size")
                 print(error)
                 self.driver.quit()
+
+    def click_login(self):
+        button_xpath = "/html/body/main/div/div[1]/div[3]/div/div[2]/div[4]/div/div[2]/button"
+        try:
+            self.driver.find_element_by_xpath(button_xpath).click()
+        except Exception as error:
+            print("error trying to login")
+            print(error)
+
