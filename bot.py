@@ -75,3 +75,24 @@ class NikeBot:
             print("error trying to login")
             print(error)
 
+    def login(self, email, password):
+
+        email_input_name = "emailAddress"
+        pwd_input_name = "password"
+        try:
+            #  get fields from the form
+            email_input_elem = WebDriverWait(self.driver, 5).until(  # wait for email field to load
+                EC.presence_of_element_located((By.NAME, email_input_name))
+            )
+            pwd_input_elem = WebDriverWait(self.driver, 5).until(  # wait for email field to load
+                EC.presence_of_element_located((By.NAME, pwd_input_name))
+            )
+
+            #  insert email and password
+            self.driver.execute_script("arguments[0].value = arguments[1].toString()", email_input_elem, email)
+            self.driver.execute_script("arguments[0].value = arguments[1].toString()", pwd_input_elem, password)
+
+        except Exception as error:
+            print("email and/or password fields not found")
+            print(error)
+            self.driver.quit()
