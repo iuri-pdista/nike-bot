@@ -50,6 +50,7 @@ if email == "" or password == "":
 bot = NikeBot(browser)
 bot.open_url()
 bot.get_product()
-bot.get_size("43", "43")
 bot.click_login()
 bot.login(email, password)
+bot.get_size("43", "43")
+bot.click_login()
