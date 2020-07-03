@@ -1,9 +1,10 @@
 import sys
+from colorama import Fore
 from bot import NikeBot
 
 
 def show_logo():
-    logo = """
+    logo = """\n\n
              .........                   .........                     
            @@@@@@@@@@@@                @@@@@@@@@@@@                   
            @@@@@@@@@@@@                @@@@@@@@@@@@                   
@@ -31,16 +32,19 @@ def show_logo():
          ░   ░ ░  ▒ ░░ ░░ ░    ░       ░    ░ ░ ░ ░ ▒    ░      
                ░  ░  ░  ░      ░  ░    ░          ░ ░           
                                             ░          
-    [*] Script made by: guiguat and iuri-pdista
+    [*] Script made by: guiguat and iuri-pdista\n
     """
-    print(logo)
+    print(Fore.RED + logo)
 
 
 def send_help(e):
-    print("Usage:\n python script.py -b <browser_name> -e <email> -p <password> -s <size1>,<size2>")
-    print(
-        "\n or python script.py --browser <browser_name> --email <email> --password <password> --size <size1>,<size2>")
-    print(e)
+    message = """
+        usage: python run.py [-b | --browser <browser name>] [-e | --email <email>] 
+        [-p | --password <password>] [-s | --size <size1>,<size2>] optional => [-n | --name <snkr name>]
+        
+    """
+    print(Fore.RED + message)
+    print(Fore.MAGENTA + e + Fore.RED)
     exit(1)
 
 
@@ -81,8 +85,7 @@ def initialize_script():
         else:
             return browser_name, email_param, pwd_param, size_param, name_param
     else:
-        print("[*] You didn't pass any arguments")
-        send_help("")
+        send_help("[*] You didn't pass any arguments")
 
 
 [browser, email, password, size, name] = initialize_script()
