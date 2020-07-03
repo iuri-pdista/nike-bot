@@ -52,6 +52,7 @@ if email == "" or password == "":
 bot = NikeBot(browser)
 bot.driver.get("https://www.nike.com.br/Snkrs")
 bot.click_login()
+#  need to reconfigure the email and pwd as parameters
 bot.login("iuricorrea05@gmail.com", "t2mYQk2Mx6Dq9_-")
 awns = input("\n \nType yes or y when login is completed. If you want to close the script type anything different: ")
 if awns == "yes" or awns == "y":
