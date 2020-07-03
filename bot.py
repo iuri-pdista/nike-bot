@@ -63,17 +63,6 @@ class NikeBot:
                 print(error)
                 self.driver.quit()
 
-    def click_login(self):
-        try:
-            elem = WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.XPATH, "/html/body/main/div/div[1]/div[3]/div/div[2]/div[4]/div/div[2]/button"))
-            )
-            self.driver.execute_script("arguments[0].click()", elem)
-            elem.click()
-        except Exception as error:
-            print("error trying to login")
-            print(error)
-
     def login(self, email, password):
 
         email_input_name = "emailAddress"
@@ -107,3 +96,5 @@ class NikeBot:
         except Exception as error:
             print("error trying to login")
             print(error)
+        if self.driver.current_url != "https://www.nike.com.br/Carrinho":
+            self.click_buy()

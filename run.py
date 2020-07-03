@@ -54,15 +54,8 @@ bot.open_url()
 awns = input("Type yes or y when login is completed. If you want to close the script type anything different: ")
 if awns == "yes" or awns == "y":
     bot.get_product()
-    sleep(10)
     bot.get_size("43", "43")
-    sleep(3)
+    #  need to pass the sizes as parameters
     bot.click_buy()
 else:
     exit(0)
-
-
-
-
-
-
