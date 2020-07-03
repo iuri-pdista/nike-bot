@@ -104,9 +104,8 @@ class NikeBot:
             )
             self.driver.execute_script("arguments[0].click()", popup_btn)
             self.login(email, password)
-        except Exception as error:
+        except:
             print("The login popup did not open")
-            print(error)
 
     def click_buy(self):
         try:
@@ -119,3 +118,14 @@ class NikeBot:
             print(error)
         if self.driver.current_url != "https://www.nike.com.br/Carrinho":
             self.click_buy()
+            
+    def alt_get_product(self, product):
+        product = product.lower()
+        elem_array = self.driver.find_elements_by_class_name("aspect-radio-box-inside")
+        for elem in elem_array:
+            alt_value = elem.get_attribute("alt")
+            alt_value = str(alt_value).lower()
+            if product in alt_value:
+                parent_elem = elem.find_element_by_xpath("..")
+                self.driver.get(parent_elem.get_attribute("href"))
+                break
