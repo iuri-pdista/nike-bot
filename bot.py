@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 
 
 class NikeBot:
@@ -62,6 +63,36 @@ class NikeBot:
                 print("invalid shoe size")
                 print(error)
                 self.driver.quit()
+
+    def click_login(self):
+        xpath = "/html/body/header/div[1]/div/div/div[2]/span[1]/span[3]/a"
+        elem = WebDriverWait(self.driver, 5).until(  # wait for email field to load
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
+        self.driver.execute_script("arguments[0].click()", elem)
+
+    def login(self, email, password):
+        email_input_name = "emailAddress"
+        pwd_input_name = "password"
+        try:
+            #  get fields from the form
+            email_input_elem = WebDriverWait(self.driver, 10).until(  # wait for email field to load
+                EC.presence_of_element_located((By.NAME, email_input_name))
+            )
+            pwd_input_elem = WebDriverWait(self.driver, 3).until(  # wait for email field to load
+                EC.presence_of_element_located((By.NAME, pwd_input_name))
+            )
+            #  insert email and password
+            self.driver.execute_script("arguments[0].value = arguments[1].toString()", email_input_elem, email)
+            self.driver.execute_script("arguments[0].value = arguments[1].toString()", pwd_input_elem, password)
+            sleep(2)
+            pwd_input_elem.send_keys(Keys.ENTER)
+
+        except Exception as error:
+            print("email and/or password fields not found")
+            print(error)
+            self.driver.quit()
+            self.driver.quit()
 
     def click_buy(self):
         try:
