@@ -50,7 +50,7 @@ def initialize_script():
 
 
 [browser, email, password, size] = initialize_script()
-size = str(size).split(",")
+size = str(size).strip().split(",")
 
 if email == "" or password == "":
     send_help("")
