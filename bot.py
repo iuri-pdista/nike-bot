@@ -106,7 +106,7 @@ class NikeBot:
             self.login(email, password)
         except Exception as error:
             print("The login popup did not open")
-
+            print(error)
 
     def click_buy(self):
         try:
@@ -119,15 +119,3 @@ class NikeBot:
             print(error)
         if self.driver.current_url != "https://www.nike.com.br/Carrinho":
             self.click_buy()
-
-
-
-
-
-
-
-            popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
-            popup_btn = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, popup_btn_xpath))
-            )
-            self.driver.execute_script("arguments[0].click()", popup_btn)
