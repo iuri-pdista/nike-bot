@@ -12,7 +12,7 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-    <option name="PARAMETERS" value="-b chrome -e iuricorrea05@gmail.com -p t2mYQk2Mx6Dq9_- -s 43,30 -n &quot;Lebron 17 Low&quot;" />
+    <option name="PARAMETERS" value="-b edge -e iuricorrea05@gmail.com -p t2mYQk2Mx6Dq9_- -s 43,24 -n Lebron" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
