@@ -39,7 +39,7 @@ class NikeBot:
         name_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div/div[1]/div/a/img"
         link = self.driver.find_element_by_xpath(link_xpath).get_attribute("href")
         name = self.driver.find_element_by_xpath(name_xpath).get_attribute("alt")
-        print(f'Selected product: {name}')
+        print(f'>>>Selected product: {name}')
         self.driver.get(link)
 
     def get_size(self, size_option1, size_option2):
@@ -50,7 +50,7 @@ class NikeBot:
             )
             self.driver.execute_script("arguments[0].checked = true;", elem)
             self.driver.execute_script("arguments[0].click();", elem)
-            print(f'selected shoe size: {size_option1}')
+            print(f'>>>Selected shoe size: {size_option1}')
 
         except:
 
@@ -60,7 +60,7 @@ class NikeBot:
                 )
                 self.driver.execute_script("arguments[0].checked = true;", elem)
                 self.driver.execute_script("arguments[0].click();", elem)
-                print(f'selected shoe size: {size_option2}')
+                print(f'>>>Selected shoe size: {size_option2}')
 
             except Exception as error:
                 print("invalid shoe size")
@@ -104,8 +104,12 @@ class NikeBot:
             )
             self.driver.execute_script("arguments[0].click()", popup_btn)
             self.login(email, password)
+            popup_open_test = True
         except:
-            print("The login popup did not open")
+            if popup_open_test:
+                print(">>>The login popup did open")
+            else:
+                print(">>>The login popup did not open")
 
     def click_buy(self):
         try:
@@ -129,3 +133,31 @@ class NikeBot:
                 parent_elem = elem.find_element_by_xpath("..")
                 self.driver.get(parent_elem.get_attribute("href"))
                 break
+    def checkout(self):
+        checkout_xpath = "/html/body/main/div[3]/div[5]/a"
+        try:
+            checkout_btn = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, checkout_xpath))
+            )
+            self.driver.execute_script("arguments[0].click()", checkout_btn)
+            if self.driver.current_url != "https://www.nike.com.br/Checkout":
+                self.checkout()
+        except Exception as error:
+            error = "Element was not found or is not interactable"
+            print(error)
+
+    def finish(self):
+        go_to_payment_xpath = "/html/body/main/div/div[3]/div[4]/div[5]/button"
+        confirm_xpath = "/html/body/div[12]/div/div/div[3]/button[1]"
+        try:
+            go_to_payment_btn = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, go_to_payment_xpath))
+            )
+            self.driver.execute_script("arguments[0].click()", go_to_payment_btn)
+            confirm_btn = WebDriverWait(self.driver, 6).until(
+                EC.presence_of_element_located((By.XPATH, confirm_xpath))
+            )
+            self.driver.execute_script("arguments[0].click()", confirm_btn)
+        except Exception as error:
+            error = "Element was not found or is not interactable"
+            print(error)
