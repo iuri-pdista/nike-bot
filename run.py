@@ -5,17 +5,18 @@ import sys
 
 
 def send_help(e):
-    print("Usage:\n python script.py -b <browser_name> -e <email> -p <password> ")
-    print("\n or python script.py --browser <browser_name> --email <email> --password <password>")
+    print("Usage:\n python script.py -b <browser_name> -e <email> -p <password> -s <size1>,<size2>")
+    print(
+        "\n or python script.py --browser <browser_name> --email <email> --password <password> --size <size1>,<size2>")
     print(e)
     exit(1)
 
 
 def initialize_script():
-
     browser_name = ""
     email_param = ""
     pwd_param = ""
+    size_param = ""
 
     if len(sys.argv) > 1:
         i = 0
@@ -30,6 +31,10 @@ def initialize_script():
 
                 elif sys.argv[i] == "-p" or sys.argv[i] == "--password":
                     pwd_param = sys.argv[i + 1] if sys.argv[i + 1] else ""
+
+                elif sys.argv[i] == "-s" or sys.argv[i] == "--size":
+                    size_param = sys.argv[i + 1] if sys.argv[i + 1] else ""
+
             except Exception as e:
                 send_help(e)
 
@@ -38,25 +43,23 @@ def initialize_script():
         if browser_name == "":
             send_help("")
         else:
-            return browser_name, email_param, pwd_param
+            return browser_name, email_param, pwd_param, size_param
     else:
         print("You didn't pass any arguments")
         send_help("")
 
 
-[browser, email, password] = initialize_script()
+[browser, email, password, size] = initialize_script()
+size = str(size).strip().split(",")
 
 if email == "" or password == "":
     send_help("")
 
 bot = NikeBot(browser)
 bot.driver.get("https://www.nike.com.br/Snkrs")
-awns = input("Type yes or y when login is completed. If you want to close the script type anything different: ")
-if awns == "yes" or awns == "y":
-    bot.open_url()
-    bot.get_product()
-    bot.get_size("43", "43")
-    #  need to pass the sizes as parameters
-    bot.click_buy()
-else:
-    exit(0)
+bot.click_login()
+bot.login(email, password)
+bot.open_url()
+bot.get_product()
+bot.get_size(size[0], size[1])
+bot.click_buy()
