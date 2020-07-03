@@ -35,8 +35,11 @@ class NikeBot:
             exit(1)
 
     def get_product(self):
-        xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
-        link = self.driver.find_element_by_xpath(xpath).get_attribute("href")
+        link_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
+        name_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div/div[1]/div/a/img"
+        link = self.driver.find_element_by_xpath(link_xpath).get_attribute("href")
+        name = self.driver.find_element_by_xpath(name_xpath).get_attribute("alt")
+        print(f'Selected product: {name}')
         self.driver.get(link)
 
     def get_size(self, size_option1, size_option2):
@@ -72,6 +75,7 @@ class NikeBot:
         self.driver.execute_script("arguments[0].click()", elem)
 
     def login(self, email, password):
+        popup_open_test = False
         email_input_name = "emailAddress"
         pwd_input_name = "password"
         try:
@@ -93,6 +97,16 @@ class NikeBot:
             print(error)
             self.driver.quit()
             self.driver.quit()
+        try:
+            popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
+            popup_btn = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, popup_btn_xpath))
+            )
+            self.driver.execute_script("arguments[0].click()", popup_btn)
+            self.login(email, password)
+        except Exception as error:
+            print("The login popup did not open")
+
 
     def click_buy(self):
         try:
@@ -105,3 +119,15 @@ class NikeBot:
             print(error)
         if self.driver.current_url != "https://www.nike.com.br/Carrinho":
             self.click_buy()
+
+
+
+
+
+
+
+            popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
+            popup_btn = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, popup_btn_xpath))
+            )
+            self.driver.execute_script("arguments[0].click()", popup_btn)
