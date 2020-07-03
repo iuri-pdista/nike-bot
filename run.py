@@ -50,11 +50,13 @@ if email == "" or password == "":
     send_help("")
 
 bot = NikeBot(browser)
-bot.open_url()
-bot.get_product()
-bot.click_login()
-bot.login(email, password)
-sleep(10)
-bot.get_size("43", "43")
-sleep(3)
-bot.click_buy()
+bot.driver.get("https://www.nike.com.br/Snkrs")
+awns = input("Type yes or y when login is completed. If you want to close the script type anything different: ")
+if awns == "yes" or awns == "y":
+    bot.open_url()
+    bot.get_product()
+    bot.get_size("43", "43")
+    #  need to pass the sizes as parameters
+    bot.click_buy()
+else:
+    exit(0)
