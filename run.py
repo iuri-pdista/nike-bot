@@ -41,8 +41,8 @@ def show_logo():
 
 def send_help(e):
     message = """
-        usage: python run.py [-b | --browser <browser name>] [-e | --email <email>] 
-        [-p | --password <password>] [-s | --size <size1>,<size2>] optional => [-n | --name <snkr name>]
+usage: python run.py [-b | --browser <browser name>] [-e | --email <email>] 
+[-p | --password <password>] [-s | --size <size1>,<size2>] optional => [-n | --name <snkr name>]
         
     """
     print(Fore.RED + message)
@@ -116,4 +116,5 @@ bot.get_size(size[0], size[1])
 bot.click_buy()
 bot.checkout()
 bot.finish()
-print(Fore.BLUE + ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :) ")
+final_msg = ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :)"
+print(Fore.BLUE + final_msg + Fore.RESET)
