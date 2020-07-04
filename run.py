@@ -1,6 +1,9 @@
 import sys
 from colorama import Fore
 from bot import NikeBot
+from os import system
+from time import sleep
+
 
 
 def show_logo():
@@ -93,11 +96,13 @@ size = str(size).strip().split(",")
 if email == "" or password == "":
     send_help("")
 
-show_logo()
 bot = NikeBot(browser)
+system('cls')
+show_logo()
 bot.driver.get("https://www.nike.com.br/Snkrs")
 bot.click_login()
 bot.login(email, password)
+sleep(6)
 bot.open_url()
 
 if name != "":
@@ -105,5 +110,10 @@ if name != "":
 else:
     bot.get_product()
 
+#  the login_checker must be called here
+
 bot.get_size(size[0], size[1])
 bot.click_buy()
+bot.checkout()
+bot.finish()
+print(Fore.BLUE + ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :) ")
