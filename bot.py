@@ -27,10 +27,14 @@ class NikeBot:
 
     def open_url(self):
         try:
+            WebDriverWait(self.driver, 8).until(  # wait for email field to load
+                EC.presence_of_element_located((By.CLASS_NAME, "minha-conta"))
+            )
             self.driver.get(self.URL)
             self.driver.refresh()
         except:
-            print("[*] Please use a valid browser\n")
+            print("[*] Unnable to open URL\n")
+            self.driver.quit()
             exit(1)
 
     def get_product(self):
@@ -41,12 +45,13 @@ class NikeBot:
         print(f'>>>Selected product: {name}')
         self.driver.get(link)
 
-    def get_size(self, size_option1, size_option2):
+    def set_size(self, size_option1, size_option2):
 
         try:
             elem = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, f'tamanho__id{size_option1}'))
             )
+
             self.driver.execute_script("arguments[0].checked = true;", elem)
             self.driver.execute_script("arguments[0].click();", elem)
             print(f'>>>Selected shoe size: {size_option1}')
@@ -62,8 +67,17 @@ class NikeBot:
                 print(f'>>>Selected shoe size: {size_option2}')
 
             except:
-                print("[*] error: invalid shoe size\n")
-                self.driver.quit()
+                error = WebDriverWait(self.driver, 3).until(
+                    EC.presence_of_element_located((By.ID, "errorModal"))
+                )
+                if error:
+                    print("[*] The website return an error, i'm sorry :(\n")
+                    self.driver.quit()
+                    exit(1)
+                else:
+                    print("[*] error: invalid shoe size\n")
+                    self.driver.quit()
+                    exit(1)
 
     def click_login(self):
         xpath = "/html/body/header/div[1]/div/div/div[2]/span[1]/span[3]/a"
@@ -73,7 +87,6 @@ class NikeBot:
         self.driver.execute_script("arguments[0].click()", elem)
 
     def login(self, email, password):
-        popup_open_test = False
         email_input_name = "emailAddress"
         pwd_input_name = "password"
         try:
@@ -91,8 +104,9 @@ class NikeBot:
             pwd_input_elem.send_keys(Keys.ENTER)
 
         except:
-            print("[*] email and/or password fields not found\n")
+            print("[*] email and/or password fields where not found\n")
             self.driver.quit()
+            exit(1)
 
         try:
             popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
@@ -101,12 +115,8 @@ class NikeBot:
             )
             self.driver.execute_script("arguments[0].click()", popup_btn)
             self.login(email, password)
-            popup_open_test = True
         except:
-            if popup_open_test:
-                print(">>> The login error popup did open\n")
-            else:
-                print(">>> The login error popup did not open\n")
+            print(">>> The login error popup did not open\n")
 
     def click_buy(self):
         try:
@@ -161,11 +171,10 @@ class NikeBot:
             print(error)
 
     def login_checker(self, email, password):
+        cart_xpath = "// *[ @ id = \"btn-comprar\"]"
         try:
-            account_anchor = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "minha-conta"))
-            )
-            self.open_url()
+            cart = self.driver.find_element_by_xpath(cart_xpath)
+            self.click_buy()
         except:
             self.click_login()
             self.login(email, password)

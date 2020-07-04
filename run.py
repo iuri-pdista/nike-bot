@@ -107,14 +107,15 @@ show_logo()
 bot.driver.get("https://www.nike.com.br/Snkrs")
 bot.click_login()
 bot.login(email, password)
-bot.login_checker(email, password)
+bot.open_url()
 
 if name != "":
     bot.alt_get_product(name)
 else:
     bot.get_product()
 
-bot.get_size(size[0], size[1])
+bot.set_size(size[0], size[1])
+bot.login_checker(email, password)
 bot.click_buy()
 bot.checkout()
 bot.finish()
