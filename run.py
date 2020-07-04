@@ -46,7 +46,7 @@ usage: python run.py [-b | --browser <browser name>] [-e | --email <email>]
         
     """
     print(Fore.RED + message)
-    print(Fore.MAGENTA + e + Fore.RED)
+    print(Fore.MAGENTA + e + Fore.RESET)
     exit(1)
 
 
