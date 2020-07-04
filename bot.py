@@ -1,5 +1,5 @@
 from time import sleep
-
+from colorama import Fore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,8 +22,12 @@ class NikeBot:
                 self.driver = webdriver.Chrome(self.PATH_CHROME)
             else:
                 print(driver + " is not a supported webdriver please choose an other one")
+                print(Fore.RESET)
+                exit(1)
         else:
-            print("A driver wasn't selected\nusage: var = NikeBot(\"edge\", url) or var = NikeBot(\"chrome\", url)")
+            print("[*] A driver wasn't selected")
+            print(Fore.RESET)
+            exit(1)
 
     def open_url(self):
         try:
@@ -35,6 +39,7 @@ class NikeBot:
         except:
             print("[*] Unnable to open URL\n")
             self.driver.quit()
+            print(Fore.RESET)
             exit(1)
 
     def get_product(self):
@@ -73,10 +78,12 @@ class NikeBot:
                 if error:
                     print("[*] The website return an error, i'm sorry :(\n")
                     self.driver.quit()
+                    print(Fore.RESET)
                     exit(1)
                 else:
                     print("[*] error: invalid shoe size\n")
                     self.driver.quit()
+                    print(Fore.RESET)
                     exit(1)
 
     def click_login(self):
@@ -106,6 +113,7 @@ class NikeBot:
         except:
             print("[*] email and/or password fields where not found\n")
             self.driver.quit()
+            print(Fore.RESET)
             exit(1)
 
         try:
