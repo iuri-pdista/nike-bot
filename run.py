@@ -3,7 +3,7 @@ from colorama import Fore
 from bot import NikeBot
 from os import system
 from time import sleep
-
+from sys import platform
 
 
 def show_logo():
@@ -41,12 +41,12 @@ def show_logo():
 
 def send_help(e):
     message = """
-        usage: python run.py [-b | --browser <browser name>] [-e | --email <email>] 
-        [-p | --password <password>] [-s | --size <size1>,<size2>] optional => [-n | --name <snkr name>]
+usage: python run.py [-b | --browser <browser name>] [-e | --email <email>] 
+[-p | --password <password>] [-s | --size <size1>,<size2>] optional => [-n | --name <snkr name>]
         
     """
     print(Fore.RED + message)
-    print(Fore.MAGENTA + e + Fore.RED)
+    print(Fore.MAGENTA + e + Fore.RESET)
     exit(1)
 
 
@@ -97,12 +97,16 @@ if email == "" or password == "":
     send_help("")
 
 bot = NikeBot(browser)
-system('cls')
+
+if platform == "win32":
+    system("cls")
+else:
+    system("clear")
+
 show_logo()
 bot.driver.get("https://www.nike.com.br/Snkrs")
 bot.click_login()
 bot.login(email, password)
-sleep(6)
 bot.open_url()
 
 if name != "":
@@ -110,10 +114,10 @@ if name != "":
 else:
     bot.get_product()
 
-#  the login_checker must be called here
-
-bot.get_size(size[0], size[1])
+bot.set_size(size[0], size[1])
+bot.login_checker(email, password)
 bot.click_buy()
 bot.checkout()
 bot.finish()
-print(Fore.BLUE + ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :) ")
+final_msg = ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :)"
+print(Fore.BLUE + final_msg + Fore.RESET)

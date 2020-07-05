@@ -1,5 +1,5 @@
 from time import sleep
-
+from colorama import Fore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,16 +22,24 @@ class NikeBot:
                 self.driver = webdriver.Chrome(self.PATH_CHROME)
             else:
                 print(driver + " is not a supported webdriver please choose an other one")
+                print(Fore.RESET)
+                exit(1)
         else:
-            print("A driver wasn't selected\nusage: var = NikeBot(\"edge\", url) or var = NikeBot(\"chrome\", url)")
+            print("[*] A driver wasn't selected")
+            print(Fore.RESET)
+            exit(1)
 
     def open_url(self):
         try:
+            WebDriverWait(self.driver, 8).until(  # wait for email field to load
+                EC.presence_of_element_located((By.CLASS_NAME, "minha-conta"))
+            )
             self.driver.get(self.URL)
             self.driver.refresh()
-        except Exception as e:
-            print("Please use a valid browser")
-            print(e)
+        except:
+            print("[*] Unnable to open URL\n")
+            self.driver.quit()
+            print(Fore.RESET)
             exit(1)
 
     def get_product(self):
@@ -42,12 +50,13 @@ class NikeBot:
         print(f'>>>Selected product: {name}')
         self.driver.get(link)
 
-    def get_size(self, size_option1, size_option2):
+    def set_size(self, size_option1, size_option2):
 
         try:
             elem = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, f'tamanho__id{size_option1}'))
             )
+
             self.driver.execute_script("arguments[0].checked = true;", elem)
             self.driver.execute_script("arguments[0].click();", elem)
             print(f'>>>Selected shoe size: {size_option1}')
@@ -62,10 +71,20 @@ class NikeBot:
                 self.driver.execute_script("arguments[0].click();", elem)
                 print(f'>>>Selected shoe size: {size_option2}')
 
-            except Exception as error:
-                print("invalid shoe size")
-                print(error)
-                self.driver.quit()
+            except:
+                error = WebDriverWait(self.driver, 3).until(
+                    EC.presence_of_element_located((By.ID, "errorModal"))
+                )
+                if error:
+                    print("[*] The website return an error, i'm sorry :(\n")
+                    self.driver.quit()
+                    print(Fore.RESET)
+                    exit(1)
+                else:
+                    print("[*] error: invalid shoe size\n")
+                    self.driver.quit()
+                    print(Fore.RESET)
+                    exit(1)
 
     def click_login(self):
         xpath = "/html/body/header/div[1]/div/div/div[2]/span[1]/span[3]/a"
@@ -75,7 +94,6 @@ class NikeBot:
         self.driver.execute_script("arguments[0].click()", elem)
 
     def login(self, email, password):
-        popup_open_test = False
         email_input_name = "emailAddress"
         pwd_input_name = "password"
         try:
@@ -92,11 +110,12 @@ class NikeBot:
             sleep(2)
             pwd_input_elem.send_keys(Keys.ENTER)
 
-        except Exception as error:
-            print("email and/or password fields not found")
-            print(error)
+        except:
+            print("[*] email and/or password fields where not found\n")
             self.driver.quit()
-            self.driver.quit()
+            print(Fore.RESET)
+            exit(1)
+
         try:
             popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
             popup_btn = WebDriverWait(self.driver, 5).until(
@@ -104,12 +123,8 @@ class NikeBot:
             )
             self.driver.execute_script("arguments[0].click()", popup_btn)
             self.login(email, password)
-            popup_open_test = True
         except:
-            if popup_open_test:
-                print(">>>The login popup did open")
-            else:
-                print(">>>The login popup did not open")
+            print(">>> The login error popup did not open\n")
 
     def click_buy(self):
         try:
@@ -117,12 +132,12 @@ class NikeBot:
                 EC.presence_of_element_located((By.ID, "btn-comprar"))
             )
             self.driver.execute_script("arguments[0].click()", elem)
-        except Exception as error:
-            print("error trying to login")
-            print(error)
+        except:
+            print("[*] error trying to find purchase button\n")
+
         if self.driver.current_url != "https://www.nike.com.br/Carrinho":
             self.click_buy()
-            
+
     def alt_get_product(self, product):
         product = product.lower()
         elem_array = self.driver.find_elements_by_class_name("aspect-radio-box-inside")
@@ -133,6 +148,7 @@ class NikeBot:
                 parent_elem = elem.find_element_by_xpath("..")
                 self.driver.get(parent_elem.get_attribute("href"))
                 break
+
     def checkout(self):
         checkout_xpath = "/html/body/main/div[3]/div[5]/a"
         try:
@@ -142,8 +158,8 @@ class NikeBot:
             self.driver.execute_script("arguments[0].click()", checkout_btn)
             if self.driver.current_url != "https://www.nike.com.br/Checkout":
                 self.checkout()
-        except Exception as error:
-            error = "Element was not found or is not interactable"
+        except:
+            error = "[*] Element was not found or is not interactable\n"
             print(error)
 
     def finish(self):
@@ -158,6 +174,15 @@ class NikeBot:
                 EC.presence_of_element_located((By.XPATH, confirm_xpath))
             )
             self.driver.execute_script("arguments[0].click()", confirm_btn)
-        except Exception as error:
-            error = "Element was not found or is not interactable"
+        except:
+            error = "[*] Element was not found or is not interactable\n"
             print(error)
+
+    def login_checker(self, email, password):
+        cart_xpath = "// *[ @ id = \"btn-comprar\"]"
+        try:
+            cart = self.driver.find_element_by_xpath(cart_xpath)
+            self.click_buy()
+        except:
+            self.click_login()
+            self.login(email, password)
