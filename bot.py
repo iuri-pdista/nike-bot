@@ -8,8 +8,10 @@ from selenium.webdriver.common.keys import Keys
 
 
 class NikeBot:
-    URL = "https://www.nike.com.br/Snkrs#estoque"
-
+    URL_CAL = "https://www.nike.com.br/Snkrs#calendario"
+    
+    URL_EST = "https://www.nike.com.br/Snkrs#estoque"
+    
     PATH_EDGE = "./edgedriver_win64/msedgedriver.exe"
 
     PATH_CHROME = "./chromedriver_win32/chromedriver.exe"
@@ -29,12 +31,15 @@ class NikeBot:
             print(Fore.RESET)
             exit(1)
 
-    def open_url(self):
+    def open_url(self, stock):
         try:
             WebDriverWait(self.driver, 8).until(  # wait for email field to load
                 EC.presence_of_element_located((By.CLASS_NAME, "minha-conta"))
             )
-            self.driver.get(self.URL)
+            if stock == "":
+                self.driver.get(self.URL_CAL)
+            else:
+                self.driver.get(self.URL_EST)
             self.driver.refresh()
         except:
             print("[*] Unnable to open URL\n")
@@ -42,13 +47,20 @@ class NikeBot:
             print(Fore.RESET)
             exit(1)
 
-    def get_product(self):
-        link_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
-        name_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div/div[1]/div/a/img"
-        link = self.driver.find_element_by_xpath(link_xpath).get_attribute("href")
-        name = self.driver.find_element_by_xpath(name_xpath).get_attribute("alt")
-        print(f'>>>Selected product: {name}')
-        self.driver.get(link)
+    def get_product(self, stock):
+        if stock == "":
+            link_xpath = "//*[@id=\"DadosPaginacaoCalendario\"]/div/div[2]/div[2]/div[2]/a"
+            link =  WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, link_xpath))
+                ).get_attribute("href")
+            self.driver.get(link)
+        else:
+            link_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div[1]/div[1]/div/div[2]/a"
+            name_xpath = "//*[@id=\"DadosPaginacaoEstoque\"]/div/div[1]/div/a/img"
+            link = self.driver.find_element_by_xpath(link_xpath).get_attribute("href")
+            name = self.driver.find_element_by_xpath(name_xpath).get_attribute("alt")
+            print(f'>>>Selected product: {name}')
+            self.driver.get(link)
 
     def set_size(self, size_option1, size_option2):
 
@@ -69,6 +81,7 @@ class NikeBot:
                 )
                 self.driver.execute_script("arguments[0].checked = true;", elem)
                 self.driver.execute_script("arguments[0].click();", elem)
+
                 print(f'>>>Selected shoe size: {size_option2}')
 
             except:
@@ -89,9 +102,9 @@ class NikeBot:
     def click_login(self):
         xpath = "/html/body/header/div[1]/div/div/div[2]/span[1]/span[3]/a"
         elem = WebDriverWait(self.driver, 5).until(  # wait for email field to load
-            EC.presence_of_element_located((By.XPATH, xpath))
+            EC.element_to_be_clickable((By.XPATH, xpath))
         )
-        self.driver.execute_script("arguments[0].click()", elem)
+        elem.click()
 
     def login(self, email, password):
         email_input_name = "emailAddress"
@@ -119,9 +132,9 @@ class NikeBot:
         try:
             popup_btn_xpath = "/html/body/div[7]/div/div[2]/input"
             popup_btn = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, popup_btn_xpath))
+                EC.element_to_be_clickable((By.XPATH, popup_btn_xpath))
             )
-            self.driver.execute_script("arguments[0].click()", popup_btn)
+            popup_btn.click()
             self.login(email, password)
         except:
             print(">>> The login error popup did not open\n")
@@ -129,9 +142,9 @@ class NikeBot:
     def click_buy(self):
         try:
             elem = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.ID, "btn-comprar"))
+                EC.element_to_be_clickable((By.ID, "btn-comprar"))
             )
-            self.driver.execute_script("arguments[0].click()", elem)
+            elem.click()
         except:
             print("[*] error trying to find purchase button\n")
 
@@ -153,9 +166,9 @@ class NikeBot:
         checkout_xpath = "/html/body/main/div[3]/div[5]/a"
         try:
             checkout_btn = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, checkout_xpath))
+                EC.element_to_be_clickable((By.XPATH, checkout_xpath))
             )
-            self.driver.execute_script("arguments[0].click()", checkout_btn)
+            checkout_btn.click()
             if self.driver.current_url != "https://www.nike.com.br/Checkout":
                 self.checkout()
         except:
@@ -167,13 +180,13 @@ class NikeBot:
         confirm_xpath = "/html/body/div[12]/div/div/div[3]/button[1]"
         try:
             go_to_payment_btn = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, go_to_payment_xpath))
+                EC.element_to_be_clickable((By.XPATH, go_to_payment_xpath))
             )
-            self.driver.execute_script("arguments[0].click()", go_to_payment_btn)
+            go_to_payment_btn.click()
             confirm_btn = WebDriverWait(self.driver, 6).until(
-                EC.presence_of_element_located((By.XPATH, confirm_xpath))
+                EC.element_to_be_clickable((By.XPATH, confirm_xpath))
             )
-            self.driver.execute_script("arguments[0].click()", confirm_btn)
+            confirm_btn.click()
         except:
             error = "[*] Element was not found or is not interactable\n"
             print(error)
