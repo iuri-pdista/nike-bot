@@ -46,7 +46,7 @@ usage: python run.py [-b | --browser <browser name>] [-e | --email <email>]
         
     """
     print(Fore.RED + message)
-    print(Fore.MAGENTA + e + Fore.RESET)
+    print(Fore.MAGENTA + str(e) + Fore.RESET)
     exit(1)
 
 
@@ -59,8 +59,8 @@ def initialize_script():
 
     if len(sys.argv) > 1:
         i = 0
+        print(len(sys.argv))
         while i < len(sys.argv):
-
             try:
                 if sys.argv[i] == "-b" or sys.argv[i] == "--browser":
                     browser_name = sys.argv[i + 1] if sys.argv[i + 1] else ""
@@ -76,10 +76,8 @@ def initialize_script():
 
                 elif sys.argv[i] == "-n" or sys.argv[i] == "--name":
                     name_param = sys.argv[i + 1] if sys.argv[i + 1] else ""
-
             except Exception as e:
                 send_help(e)
-
             i += 1
 
         if browser_name == "" or email_param == "" or pwd_param == "" or size_param == "":
@@ -91,6 +89,11 @@ def initialize_script():
 
 
 [browser, email, password, size, name] = initialize_script()
+
+stock = input("[*] Do you want to buy from Estoque?(yes/no): ")
+if stock != "yes" and stock != "y":
+    stock = ""
+
 size = str(size).strip().split(",")
 
 if email == "" or password == "":
@@ -107,12 +110,12 @@ show_logo()
 bot.driver.get("https://www.nike.com.br/Snkrs")
 bot.click_login()
 bot.login(email, password)
-bot.open_url()
+bot.open_url(stock)
 
 if name != "":
     bot.alt_get_product(name)
 else:
-    bot.get_product()
+    bot.get_product(stock)
 
 bot.set_size(size[0], size[1])
 bot.login_checker(email, password)
@@ -121,3 +124,4 @@ bot.checkout()
 bot.finish()
 final_msg = ">>>OUR JOB HERE IS DONE, PLEASE CONFIRM YOUR DATA, FINISH THE PURCHASE MANUALLY AND \n ENJOY YOUR SNKRS :)"
 print(Fore.BLUE + final_msg + Fore.RESET)
+
